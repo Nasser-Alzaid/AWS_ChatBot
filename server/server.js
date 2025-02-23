@@ -41,9 +41,9 @@ ${prompt}
       contentType: "application/json",
       body: JSON.stringify({
         prompt: formattedPrompt,
-        max_gen_len: 512,
+        max_gen_len: 400,
         temperature: 0.5,
-        top_p: 0.9,
+        top_p: 0.8,
       }),
     });
 

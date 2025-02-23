@@ -1,19 +1,19 @@
-import bot from './assets/bot.svg';
-import user from './assets/user.svg';
+import bot from "./assets/bot.svg";
+import user from "./assets/user.svg";
 
-const form = document.querySelector('form');
-const chatContainer = document.querySelector('#chat_container');
+const form = document.querySelector("form");
+const chatContainer = document.querySelector("#chat_container");
 
 let loadInterval;
 
 function loader(element) {
-  element.textContent = '';
+  element.textContent = "";
 
   loadInterval = setInterval(() => {
-    element.textContent += '.';
+    element.textContent += ".";
 
-    if (element.textContent === '....') {
-      element.textContent = '';
+    if (element.textContent === "....") {
+      element.textContent = "";
     }
   }, 300);
 }
@@ -28,7 +28,7 @@ function typeText(element, text) {
     } else {
       clearInterval(interval);
     }
-  }, 20);
+  }, 30);
 }
 
 function generateUniqueId() {
@@ -41,10 +41,10 @@ function generateUniqueId() {
 
 function chatStripe(isAI, value, uniqueId) {
   return `
-    <div class="wrapper ${isAI ? 'ai' : ''}">
+    <div class="wrapper ${isAI ? "ai" : ""}">
       <div class="chat">
         <div class="profile">
-          <img src="${isAI ? bot : user}" alt="${isAI ? 'bot' : 'user'}" />
+          <img src="${isAI ? bot : user}" alt="${isAI ? "bot" : "user"}" />
         </div>
         <div class="message" id="${uniqueId}">${value}</div>
       </div>
@@ -58,13 +58,13 @@ const handleSubmit = async (e) => {
   const data = new FormData(form);
 
   // User's chat stripe
-  chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
+  chatContainer.innerHTML += chatStripe(false, data.get("prompt"));
 
   form.reset();
 
   // Bot's chat stripe
   const uniqueId = generateUniqueId();
-  chatContainer.innerHTML += chatStripe(true, ' ', uniqueId);
+  chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
 
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
@@ -73,18 +73,18 @@ const handleSubmit = async (e) => {
   loader(messageDiv);
 
   try {
-    const response = await fetch('http://localhost:5001', {
-      method: 'POST',
+    const response = await fetch("http://localhost:5001", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: data.get('prompt'),
+        prompt: data.get("prompt"),
       }),
     });
 
     clearInterval(loadInterval);
-    messageDiv.innerHTML = '';
+    messageDiv.innerHTML = "";
 
     if (response.ok) {
       const responseData = await response.json();
@@ -93,20 +93,20 @@ const handleSubmit = async (e) => {
       typeText(messageDiv, parsedData);
     } else {
       const err = await response.text();
-      messageDiv.innerHTML = 'Something went wrong';
-      console.error('Server Error:', err);
-      alert(err); 
+      messageDiv.innerHTML = "Something went wrong";
+      console.error("Server Error:", err);
+      alert(err);
     }
   } catch (error) {
     clearInterval(loadInterval);
-    messageDiv.innerHTML = 'Something went wrong';
-    console.error('Fetch Error:', error);
-    alert('Failed to fetch: ' + error.message);
+    messageDiv.innerHTML = "Something went wrong";
+    console.error("Fetch Error:", error);
+    alert("Failed to fetch: " + error.message);
   }
 };
 
-form.addEventListener('submit', handleSubmit);
-form.addEventListener('keyup', (e) => {
+form.addEventListener("submit", handleSubmit);
+form.addEventListener("keyup", (e) => {
   if (e.keyCode === 13) {
     handleSubmit(e);
   }
