@@ -20,6 +20,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const masterPrompt =
+  "This is the master prompt. Please follow the instructions carefully. Your name is Jarvis. You are an AI assistant.";
+
 app.get("/", async (req, res) => {
   res.status(200).send({
     message: "Hello from JARVIS",
@@ -31,9 +34,9 @@ app.post("/", async (req, res) => {
     const { prompt } = req.body;
 
     const formattedPrompt = `
+${masterPrompt}
 
 ${prompt}
-
 `;
 
     const command = new InvokeModelCommand({
