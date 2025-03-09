@@ -20,8 +20,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const masterPrompt =
-  "This is the master prompt. Please follow the instructions carefully. Your name is Jarvis. You are an AI assistant.";
+const masterPrompt = "Your name is Jarvis. You are an AI assistant.";
 
 app.get("/", async (req, res) => {
   res.status(200).send({
